@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  app:
+    depends_on:
+      - mongo
+      - nginx
+    environment:
+      PORT: "5000"
+      MONGO_CONNECTION_STRING: mongodb://mongo/database
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    expose:
+      - "5000"
+    container_name: express-ts-demo
+    command: node dist/app.js
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+
+  mongo:
+    image: mongo
+    volumes:
+      - "./mongodb/data/db:/mongodb/data/db"
