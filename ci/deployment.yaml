@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: express-ts-demo-deployment
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      server: express-ts-demo
+
+  template:
+    metadata:
+      labels:
+        server: express-ts-demo
+    spec:
+      containers:
+        - name: express-ts-demo
+          command: 
+            - node dist/app.js
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          image: express-ts-demo:v1.0.1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - name: NODE_ENV
+              value: production
