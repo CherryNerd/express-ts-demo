@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongodb-deployment
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: mongo-deployment
+
+  template:
+    metadata:
+      labels:
+        app: mongo-deployment
+
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom: 
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-username
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-password
+              
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+        
+          volumeMounts:
+            - mountPath: /mongodb/data/db
+              name: mongo-claim
+      volumes:
+        - name: mongo-claim
+          persistentVolumeClaim:
+            claimName: mongo-claim

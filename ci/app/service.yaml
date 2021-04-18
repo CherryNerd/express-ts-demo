@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: express-ts-demo-clusterip-service
+  
+spec:
+  type: ClusterIP
+  selector:
+    app: express-ts-demo
+  
+  ports:
+  - port: 80
+    targetPort: 5000
