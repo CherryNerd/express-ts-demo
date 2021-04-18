@@ -1,6 +1,8 @@
 import http, {IncomingMessage} from 'http';
 const options = {
-  host: "localhost",
+  host: 
+  process.env.NODE_ENV === 'production' ? 
+  "express-ts-demo-clusterip-service" : 'localhost',
   path: '/healthcheck',
   port: process.env.PORT,
   timeout: 2000,
